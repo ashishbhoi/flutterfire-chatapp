@@ -39,6 +39,7 @@ dependencies:
   dynamic_color: ^1.5.4
   firebase_core: ^2.1.1
   firebase_auth: ^4.1.1
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

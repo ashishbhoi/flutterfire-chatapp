@@ -1,5 +1,7 @@
 import 'package:chatapp/firebase_options.dart';
 import 'package:chatapp/pages/home_page.dart';
+import 'package:chatapp/pages/login_page.dart';
+import 'package:chatapp/shared/shared_preferences_state.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +14,21 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isSignedIn = false;
+
+  @override
+  void initState() {
+    getLoggedInStatus();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +60,19 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           debugShowCheckedModeBanner: false,
-          home: const HomePage(),
+          home: _isSignedIn ? const HomePage() : const LoginPage(),
         );
       }
     );
+  }
+
+  void getLoggedInStatus() async {
+    await SharedPreferencesState.getLoggedInStatus().then((value) {
+      if (value != null) {
+        setState(() {
+          _isSignedIn = value;
+        });
+      }
+    });
   }
 }
