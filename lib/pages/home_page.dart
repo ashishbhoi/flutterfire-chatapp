@@ -1,3 +1,7 @@
+import 'package:chatapp/pages/auth/login_page.dart';
+import 'package:chatapp/services/firebase_auth_service.dart';
+import 'package:chatapp/shared/shared_preferences_state.dart';
+import 'package:chatapp/widgets/navigator_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,39 +12,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
+  FirebaseAuthService firebaseAuthService = FirebaseAuthService();
+  String _userName = "";
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    getUserName();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Flutter Demo Home Page"),
+        centerTitle: true,
+        title: const Text("Chat App"),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          firebaseAuthService.signOutUser();
+          nextScreenPushAndRemove(context, const LoginPage());
+        },
+        label: const Text("SignOut"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: Text(_userName),
       ),
     );
+  }
+
+  void getUserName() async {
+    await SharedPreferencesState.getUserName().then((value) {
+      if (value != null) {
+        setState(() {
+          _userName = value;
+        });
+      }
+    });
   }
 }

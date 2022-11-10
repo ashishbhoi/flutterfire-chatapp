@@ -1,6 +1,6 @@
 import 'package:chatapp/firebase_options.dart';
+import 'package:chatapp/pages/auth/login_page.dart';
 import 'package:chatapp/pages/home_page.dart';
-import 'package:chatapp/pages/login_page.dart';
 import 'package:chatapp/shared/shared_preferences_state.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
